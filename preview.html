@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        <h1>Your Generated Resume</h1>
+
+        <pre id="output" class="resume-output"></pre>
+
+        <button onclick="downloadResume()">Download Resume</button>
+
+        <a href="generate.html">
+            <button>Create Another Resume</button>
+        </a>
+
+        <a href="home.html" class="back-link">Back to Dashboard</a>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        const resume = localStorage.getItem("generatedResume");
+        document.getElementById("output").textContent =
+            resume || "No resume found. Please create a resume first.";
+    </script>
+</body>
+</html>

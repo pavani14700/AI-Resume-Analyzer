@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        <h1>AI Resume Analysis</h1>
+
+        <section class="result-card">
+            <div class="score-container">
+                <div class="circle">
+                    <div class="inner">
+                        <h2 id="score">--</h2>
+                        <p>/100</p>
+                    </div>
+                </div>
+
+                <div class="score-text">
+                    <h3>Resume Score</h3>
+                    <p id="summary"></p>
+                </div>
+            </div>
+
+            <hr>
+
+            <section class="section strength">
+                <h3>Key Strengths</h3>
+                <ul id="strengths"></ul>
+            </section>
+
+            <section class="section weak">
+                <h3>Areas to Improve</h3>
+                <ul id="weaknesses"></ul>
+            </section>
+
+            <section class="section suggest">
+                <h3>Suggestions</h3>
+                <ul id="suggestions"></ul>
+            </section>
+
+            <section class="section job">
+                <h3>Recommended Job Roles</h3>
+                <ul id="recommendedRoles"></ul>
+            </section>
+
+            <section class="section generated">
+                <h3>Improved Resume Draft</h3>
+                <pre id="generatedOutput" class="resume-output"></pre>
+                <button onclick="downloadImprovedResume()">
+                    Download Resume Draft
+                </button>
+            </section>
+
+            <a href="upload.html">
+                <button>Analyze Another Resume</button>
+            </a>
+            <a href="home.html" class="back-link">Back to Dashboard</a>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        const analysis = JSON.parse(localStorage.getItem("resumeAnalysis") || "null");
+
+        if (analysis) {
+            const score = Math.max(0, Math.min(100, Number(analysis.score) || 0));
+            document.getElementById("score").textContent = score;
+            document.querySelector(".circle").style.background =
+                `conic-gradient(#6a5acd 0% ${score}%, rgba(255, 255, 255, 0.15) ${score}% 100%)`;
+            document.getElementById("summary").textContent = analysis.summary;
+            document.getElementById("generatedOutput").textContent = analysis.improvedResume;
+
+            for (const [id, items] of Object.entries({
+                strengths: analysis.strengths,
+                weaknesses: analysis.weaknesses,
+                suggestions: analysis.suggestions,
+                recommendedRoles: analysis.recommendedRoles
+            })) {
+                const list = document.getElementById(id);
+                for (const item of items) {
+                    const entry = document.createElement("li");
+                    entry.textContent = item;
+                    list.appendChild(entry);
+                }
+            }
+        } else {
+            document.getElementById("summary").textContent =
+                "No analysis is available. Upload a resume to get started.";
+            document.getElementById("generatedOutput").textContent =
+                "No improved resume draft is available.";
+        }
+    </script>
+</body>
+</html>
